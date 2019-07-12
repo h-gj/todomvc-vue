@@ -22,12 +22,45 @@
 
 	const app = new Vue({
 		data: {
-			todos,
-			currentEditing: null
+			todos: JSON.parse(window.localStorage.getItem('todos') || '[]'),
+			currentEditing: null,
+			filterCondition: ''
 		},
 		computed: {
 			remainingTodos () {
 				return this.todos.filter(todo => ! todo.completed).length
+			},
+
+			isChecked: {
+				get () {
+					return this.todos.every(todo => todo.completed)
+				},
+				set () {
+					var isChecked = !this.isChecked
+					this.todos.forEach(todo => todo.completed = isChecked)
+				}
+			},
+
+			filteredTodos () {
+				switch (this.filterCondition) {
+					case 'active':
+						return this.todos.filter(todo => !todo.completed)
+						break
+					case 'completed':
+						return this.todos.filter(todo => todo.completed)
+						break
+					default:
+						return this.todos
+				}
+			}
+
+		},
+		watch: {
+			todos: {
+				handler (val, oldVal) {
+					window.localStorage.setItem('todos', JSON.stringify(val))
+				},
+				deep: true
 			}
 		},
 		methods: {
@@ -80,5 +113,15 @@
 			}
 		}
 	}).$mount('#app')
+
+	window.onhashchange = handlerHashChange
+
+	handlerHashChange()
+
+	function handlerHashChange () {
+		var hash = window.location.hash.substr(2)
+		app.filterCondition = hash
+	}
+
 
 })(window);

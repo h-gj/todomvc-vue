@@ -20,7 +20,11 @@
 			<!-- This section should be hidden by default and shown when there are todos -->
 			<template v-if="todos.length">
 				<section class="main">
-				<input @change="handleToggle" id="toggle-all" class="toggle-all" type="checkbox">
+				<input 
+				id="toggle-all" 
+				class="toggle-all" 
+				type="checkbox"
+				v-model="isChecked">
 				<label for="toggle-all">Mark all as complete</label>
 				<ul class="todo-list">
 					<!-- These are here just to show the structure of the list items -->
@@ -28,7 +32,7 @@
 					<li 
 					:class="{completed: item.completed,
 							 editing: currentEditing === item}" 
-					v-for="(item, index) in todos">
+					v-for="(item, index) in filteredTodos">
 						<div class="view">
 							<input class="toggle" type="checkbox" v-model="item.completed">
 							<label @dblclick="handleClick(item)" >{{ item.title }}</label>
@@ -59,13 +63,13 @@
 				<!-- Remove this if you don't implement routing -->
 				<ul class="filters">
 					<li>
-						<a class="selected" href="#/">All</a>
+						<a :class="{selected: filterCondition === ''}" href="#/">All</a>
 					</li>
 					<li>
-						<a href="#/active">Active</a>
+						<a :class="{selected: filterCondition === 'active'}" href="#/active">Active</a>
 					</li>
 					<li>
-						<a href="#/completed">Completed</a>
+						<a :class="{selected: filterCondition === 'completed'}" href="#/completed">Completed</a>
 					</li>
 				</ul>
 				<!-- Hidden if no completed items are left ↓ -->
