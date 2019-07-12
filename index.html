@@ -15,7 +15,7 @@
 		<section class="todoapp" id="app">
 			<header class="header">
 				<h1>todos</h1>
-				<input @keyup.enter="handleKeyUp" class="new-todo" placeholder="What needs to be done?" autofocus>
+				<input @keyup.enter="handleKeyUp" class="new-todo" placeholder="What needs to be done?" v-focus>
 			</header>
 			<!-- This section should be hidden by default and shown when there are todos -->
 			<template v-if="todos.length">
@@ -41,6 +41,7 @@
 						<input 
 						class="edit" 
 						:value="item.title"
+						v-edit-focus="currentEditing === item"
 						@keyup.enter="handleSave(index, item, $event)"
 						@blur="handleSave(index, item, $event)"
 						@keyup.esc="handleDiscardSave"

@@ -20,6 +20,20 @@
 		}
 	]
 
+	Vue.directive('focus', {
+		inserted (ele) {
+			ele.focus()
+		}
+	})
+
+	Vue.directive('edit-focus', {
+		update (ele, binding) {
+			if (binding.value) {
+				ele.focus()
+			}
+		}
+	})
+
 	const app = new Vue({
 		data: {
 			todos: JSON.parse(window.localStorage.getItem('todos') || '[]'),
